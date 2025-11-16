@@ -53,6 +53,8 @@ padding: 40px;
 flex:none;
 font-size:20px;
 line-height:2;
+font-style: italic;
+color: rgb(65, 65, 65);
 }
 .smallpic{
 display: flex;
@@ -89,7 +91,8 @@ background-position: center center;
 }
 @media (max-width: 500px){
 .main{
-flex:none;
+display:flex;
+flex-direction: column;
 justify-content: center;
 align-items: center;
 background-color: rgba(255, 255, 255, 0.74);
