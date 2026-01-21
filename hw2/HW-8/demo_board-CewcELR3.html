@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>時空裂縫留言板 - Demo Board</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* 留言卡片樣式 (學生產生的 HTML 會套用這個) */
+        .msg-card {
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid #6366f1;
+            /* Indigo accent */
+            transition: transform 0.2s;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .msg-card:hover {
+            transform: translateY(-3px);
+        }
+
+        .msg-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #f3f4f6;
+            padding-bottom: 8px;
+        }
+
+        .msg-author {
+            font-weight: bold;
+            color: #1f2937;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .msg-time {
+            font-size: 0.85em;
+            color: #6b7280;
+            font-family: monospace;
+        }
+
+        .msg-content {
+            color: #4b5563;
+            line-height: 1.6;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-slate-100 min-h-screen p-6 md:p-12">
+
+    <div class="max-w-3xl mx-auto">
+        <header class="mb-8 text-center">
+            <h1 class="text-3xl font-bold text-slate-800 mb-2">🌌 Chronicles of the Rift</h1>
+            <p class="text-slate-500">時空裂縫留言板 - 僅顯示 <span
+                    class="bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded font-bold">2024</span> 年的紀錄</p>
+        </header>
+
+        <div
+            class="bg-white p-6 rounded-xl shadow-md mb-8 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="text-sm text-gray-600">
+                <p>API Endpoint: <code class="bg-gray-100 px-2 py-1 rounded">/api/messages</code></p>
+            </div>
+            <button id="btn-load"
+                class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-6 rounded-full shadow transition-transform active:scale-95 flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+                    <path d="M3 3v5h5" />
+                    <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16" />
+                    <path d="M16 16h5v5" />
+                </svg>
+                讀取並篩選留言
+            </button>
+        </div>
+
+        <div id="message-board" class="space-y-4 min-h-[200px]">
+            <div class="text-center text-gray-400 py-10 border-2 border-dashed border-gray-300 rounded-xl">
+                尚未載入資料...
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const API_ENDPOINT = "https://web-and-algo-prac-api.vercel.app/api/messages";
+
+        // 更新 UI 顯示正確的 API 路徑
+        document.querySelector('.text-sm code').innerText = API_ENDPOINT;
+
+        // 綁定按鈕事件
+        document.getElementById('btn-load').addEventListener('click', () => {
+            if (typeof renderMessages === 'function') {
+                const board = document.getElementById('message-board');
+
+                // 顯示 Loading 狀態
+                board.innerHTML = `
+                    <div class="flex flex-col items-center justify-center py-10 text-indigo-500 space-y-3">
+                        <svg class="animate-spin h-8 w-8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        <span>正在連線至時空裂縫資料庫...</span>
+                    </div>
+                `;
+
+                // 呼叫自主寫的函式，並傳入真實的 API 網址
+                renderMessages(API_ENDPOINT);
+            } else {
+                alert("錯誤：找不到 renderMessages 函式！請確認 board_logic.js 已正確連結。");
+            }
+        });
+    </script>
+
+    <script src="board_logic.js"></script>
+
+</body>
+</html>
