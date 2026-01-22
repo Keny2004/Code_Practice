@@ -20,7 +20,7 @@ async function renderMessages(apiUrl) {
             'Content-Type': 'application/json'
         },
     });
-    const data = await response.json();
+    const data = await response.json();//拆包，json.stringify(data)是打包
     console.log(data);
     const data2024 = data.filter(message => {
         const messageDate = new Date(message.timestamp);
