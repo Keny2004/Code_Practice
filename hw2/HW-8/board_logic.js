@@ -13,5 +13,36 @@ async function renderMessages(apiUrl) {
     // 2.篩選出年份為2024年的資料
     // 3.根據時間大小排序資料
     // 4.將資料依下方模板規範渲染至message-board容器中
+    //<div id="message-board"></div>
+    const response = await fetch(apiUrl, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+    });
+    const data = await response.json();
+    console.log(data);
+    const data2024 = data.filter(message => {
+        const messageDate = new Date(message.timestamp);
+        console.log(messageDate);
+        console.log(messageDate.getFullYear());
+        return messageDate.getFullYear() === 2024;
+    });
+    data2024.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+    console.log(data2024);
+    const messageBoard = document.getElementById('message-board');
+    let string = '';
+    data2024.forEach(element => {
+    string += `
+    <div class="msg-card">
+        <div class="msg-header">
+            <span class="msg-author">
+                <span class="icon">👤</span> 
+            ${element.author} </span>
+        <span class="msg-time">${element.timestamp}</span> </div>
+        <p class="msg-content">${element.content} </p>
+    </div>`;
     
+    });
+    messageBoard.innerHTML = string;
 }
