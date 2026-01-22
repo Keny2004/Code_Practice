@@ -44,5 +44,6 @@ async function renderMessages(apiUrl) {
     </div>`;
     
     });
+    console.log(string);
     messageBoard.innerHTML = string;
 }
